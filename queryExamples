@@ -5,3 +5,16 @@
     age
   }
 }
+
+// get a company associated with a user
+
+{
+  user(id: "23") {
+    firstName
+    company {
+      id
+      name
+      description
+    }
+  }
+}

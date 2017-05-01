@@ -7,12 +7,31 @@ const {
   GraphQLSchema
 } = graphql;
 
+// Order of definition matters
+const CompanyType = new GraphQLObjectType({
+  name: 'Company',
+  fields: {
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    description: { type: GraphQLString }
+  }
+});
+
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: {
     id: { type: GraphQLString },
     firstName: { type: GraphQLString },
-    age: { type: GraphQLInt }
+    age: { type: GraphQLInt },
+    // teach graphql how to get to the company associateed with the user, from the user
+    company: {
+      type: CompanyType,
+      resolve(parentValue, args) {
+        console.log('parentValue and args - check Terminal', parentValue, args);
+        return axios.get(`http://localhost:3000/companies/${parentValue.companyId}`)
+          .then(res => res.data);
+      }
+    }
   }
 });
 
